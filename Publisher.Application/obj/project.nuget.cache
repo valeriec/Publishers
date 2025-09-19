@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "rMQ073EHJgE=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\jobregon\\Apps\\Publishers\\Publisher.Application\\Publisher.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\jobregon\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\jobregon\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512"
+  ],
+  "logs": []
+}

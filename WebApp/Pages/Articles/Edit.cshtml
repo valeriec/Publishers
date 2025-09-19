@@ -1,0 +1,28 @@
+@page "{id:int}"
+@model WebApp.Pages.Articles.EditModel
+@{
+    ViewData["Title"] = "Editar artículo";
+}
+<div class="container mt-5">
+    <h4 class="mb-4 text-primary">Editar artículo</h4>
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+    <form method="post">
+        <div class="mb-3">
+            <label for="Title" class="form-label">Título</label>
+            <input type="text" class="form-control" id="Title" name="Title" asp-for="Article.Title" required />
+        </div>
+        <div class="mb-3">
+            <label for="Summary" class="form-label">Contenido</label>
+            <textarea class="form-control" id="Summary" name="Summary" asp-for="Article.Summary" rows="6" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="Author" class="form-label">Autor</label>
+            <input type="text" class="form-control" id="Author" name="Author" asp-for="Article.Author" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        <a class="btn btn-outline-secondary ms-2" asp-page="Manage">Cancelar</a>
+    </form>
+</div>

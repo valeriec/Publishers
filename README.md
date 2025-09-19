@@ -18,15 +18,6 @@ Requisitos
 Docker y Docker Compose
 (Opcional) Git
 
-Instalación y ejecución rápida
-Clona el repositorio:
-sh
-git clone https://github.com/<tu-usuario>/<tu-repo>.git
-cd <tu-repo>
-Levanta todos los servicios con Docker Compose:
-sh
-docker-compose up --build
-
 Accede a la WebApp:
 http://localhost:5000
 
@@ -39,11 +30,10 @@ Admin:
 Usuario: admin
 Email: admin@demo.com
 Contraseña: Admin123$
- 
+
 Estructura de carpetas
 Publishers/
 ├── API1/
 ├── API2/
 ├── WebApp/
 ├── docker-compose.yml
-

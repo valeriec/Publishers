@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  api1:
+    build:
+      context: .
+      dockerfile: API1/Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_URLS=http://+:5001
+    networks:
+      - publishers-net
+  api2:
+    build:
+      context: .
+      dockerfile: API2/Dockerfile
+    ports:
+      - "5002:5002"
+    environment:
+      - ASPNETCORE_URLS=http://+:5002
+    networks:
+      - publishers-net
+  webapp:
+    build:
+      context: .
+      dockerfile: WebApp/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - Api1BaseUrl=http://api1:5001/api
+      - Api2BaseUrl=http://api2:5002/api
+    networks:
+      - publishers-net
+    depends_on:
+      - api1
+      - api2
+
+networks:
+  publishers-net:
+    driver: bridge

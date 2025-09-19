@@ -1,0 +1,99 @@
+@page "{id:int}"
+@model DetailsModel
+@{
+    ViewData["Title"] = "Detalle de artículo";
+}
+<div class="container mt-5">
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title text-primary">@Model.Article?.Title</h5>
+            <h6 class="card-subtitle mb-3 text-muted">@Model.Article?.Author - @Model.Article?.Date.ToString("dd/MM/yyyy HH:mm")</h6>
+            <p class="card-text mb-4">@Model.Article?.Summary</p>
+            <div class="text-center mb-3">
+                <button class="btn btn-primary" id="btnToggleComments">Mostrar comentarios</button>
+            </div>
+            <div id="commentsSection" style="display:none;">
+                <h6 class="text-primary">Comentarios (<span id="commentsCount">@Model.Comments.Count</span>)</h6>
+                
+                <!-- Formulario para agregar comentario -->
+                <form method="post" class="mb-4" id="commentForm">
+                    <input type="hidden" name="ArticleId" value="@Model.Article?.Id" />
+                    <div class="row">
+                        <div class="col-9">
+                            <textarea class="form-control" name="Content" rows="2" placeholder="Agregar comentario..." required style="resize: none;" oninvalid="this.setCustomValidity('Por favor, completa este campo.')" oninput="this.setCustomValidity('')"></textarea>
+                        </div>
+                        <div class="col-3 d-flex align-items-center">
+                            <button type="submit" class="btn btn-primary w-100" id="publishBtn">
+                                <span id="publishText">Publicar</span>
+                                <span id="publishSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Lista de comentarios existentes -->
+                @if (Model.Comments != null && Model.Comments.Count > 0)
+                {
+                    <!-- Línea separadora antes del primer comentario -->
+                    <hr class="my-3" />
+                    
+                    @for (int i = 0; i < Model.Comments.Count; i++)
+                    {
+                        var comment = Model.Comments[i];
+                        var isLast = i == Model.Comments.Count - 1;
+                        
+                        <div class="mb-3">
+                            <div class="text-muted small mb-1">
+                                Publicado por @comment.Author el @comment.CreatedAt
+                            </div>
+                            <div class="@(isLast ? "pb-2" : "border-bottom pb-2")">
+                                @comment.Content
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-info">No hay comentarios aún.</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+<script>
+    $(function () {
+        $('#btnToggleComments').click(function () {
+            var section = $('#commentsSection');
+            var btn = $(this);
+            section.toggle();
+            btn.text(section.is(':visible') ? 'Ocultar comentarios' : 'Mostrar comentarios');
+        });
+        
+        // Prevenir doble envío del formulario de comentarios
+        $('#commentForm').on('submit', function(e) {
+            var submitBtn = $('#publishBtn');
+            var publishText = $('#publishText');
+            var publishSpinner = $('#publishSpinner');
+            
+            // Si el botón ya está deshabilitado, prevenir el envío
+            if (submitBtn.prop('disabled')) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Deshabilitar el botón y mostrar spinner
+            submitBtn.prop('disabled', true);
+            publishText.hide();
+            publishSpinner.show();
+            
+            // Opcional: Re-habilitar después de un tiempo por si hay error
+            setTimeout(function() {
+                submitBtn.prop('disabled', false);
+                publishText.show();
+                publishSpinner.hide();
+            }, 5000); // 5 segundos
+        });
+    });
+</script>
+}

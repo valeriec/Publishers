@@ -1,0 +1,87 @@
+@page
+@model ManageModel
+@{
+    ViewData["Title"] = "Gestión de artículos";
+}
+<div class="container mt-5">
+    <h4 class="mb-4 text-primary">Gestión de artículos</h4>
+    <div class="mb-3 text-end">
+        <a class="btn btn-primary" asp-page="Create">Nuevo artículo</a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th class="text-center">Autor</th>
+                <th class="text-center">Título</th>
+                <th class="text-center">Fecha de publicación</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Articles != null && Model.Articles.Count > 0)
+            {
+                foreach (var article in Model.Articles)
+                {
+                    <tr>
+                        <td class="text-center">@article.Author</td>
+                        <td class="text-center">@article.Title</td>
+                        <td class="text-center">@article.Date.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="text-center">
+                            <a class="btn btn-outline-primary btn-sm" asp-page="Details" asp-route-id="@article.Id">Ver detalle</a>
+                            
+                            @if (Model.CanEditOrDelete(article))
+                            {
+                                <!-- Botones habilitados para usuarios con permisos -->
+                                <a class="btn btn-warning btn-sm" asp-page="Edit" asp-route-id="@article.Id">Editar</a>
+                                <a class="btn btn-danger btn-sm" asp-page="Delete" asp-route-id="@article.Id">Eliminar</a>
+                            }
+                            else
+                            {
+                                <!-- Botones deshabilitados con tooltip para usuarios sin permisos -->
+                                <!-- Envolver en span para que funcione el tooltip en elementos deshabilitados -->
+                                <span title="Solo el autor o un administrador pueden editar este artículo"
+                                      data-bs-toggle="tooltip" 
+                                      data-bs-placement="top">
+                                    <a class="btn btn-warning btn-sm disabled" 
+                                       href="#" 
+                                       onclick="return false;" 
+                                       style="pointer-events: none;">
+                                       Editar
+                                    </a>
+                                </span>
+                                <span title="Solo el autor o un administrador pueden eliminar este artículo"
+                                      data-bs-toggle="tooltip" 
+                                      data-bs-placement="top">
+                                    <a class="btn btn-danger btn-sm disabled" 
+                                       href="#" 
+                                       onclick="return false;" 
+                                       style="pointer-events: none;">
+                                       Eliminar
+                                    </a>
+                                </span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="text-center">No hay artículos para mostrar.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        // Inicializar tooltips de Bootstrap
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,107 @@
+@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4">
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div class="alert alert-success">@Model.SuccessMessage</div>
+    }
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+                <h3 class="text-center mb-4 text-primary">Bienvenido al Sistema de Publicación de Artículos</h3>
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="Username" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="Username" name="Username" required oninvalid="this.setCustomValidity('Por favor, ingresa tu nombre de usuario.')" oninput="this.setCustomValidity('')" placeholder="Ingresa tu usuario" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="Password" name="Password" required oninvalid="this.setCustomValidity('Por favor, ingresa tu contraseña.')" oninput="this.setCustomValidity('')" />
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                        <button type="button" class="btn btn-outline-primary" id="btnRegister">Regístrate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal de registro -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="registerModalLabel">Registro de nuevo usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" asp-page-handler="Register" id="registerForm">
+          <div class="mb-3">
+            <label for="RegisterUsername" class="form-label">Usuario</label>
+            <input type="text" class="form-control" id="RegisterUsername" name="RegisterUsername" asp-for="RegisterUsername" required oninvalid="this.setCustomValidity('Por favor, ingresa un nombre de usuario.')" oninput="this.setCustomValidity('')" placeholder="Ingresa tu usuario" />
+          </div>
+          <div class="mb-3">
+            <label for="RegisterPassword" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="RegisterPassword" name="RegisterPassword" asp-for="RegisterPassword" required oninvalid="this.setCustomValidity('Por favor, ingresa una contraseña.')" oninput="this.setCustomValidity('')" />
+          </div>
+          <div class="mb-3">
+            <label for="ConfirmPassword" class="form-label">Confirmar contraseña</label>
+            <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" asp-for="ConfirmPassword" required oninvalid="this.setCustomValidity('Por favor, confirma tu contraseña.')" oninput="this.setCustomValidity('')" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" form="registerForm" class="btn btn-primary">Registrar</button>
+        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+@section Scripts {
+    <script>
+        $(function () {
+            $('#btnRegister').click(function () {
+                $('#registerModal').modal('show');
+            });
+            
+            // Limpiar el formulario cuando se cierra el modal
+            $('#registerModal').on('hidden.bs.modal', function () {
+                $('#registerForm')[0].reset();
+                // Limpiar también los valores del modelo
+                $('#RegisterUsername').val('');
+                $('#RegisterPassword').val('');
+                $('#ConfirmPassword').val('');
+            });
+            
+            // Si hay un mensaje de éxito, mostrar el modal brevemente y luego cerrarlo
+            @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+            {
+                <text>
+                setTimeout(function() {
+                    $('.alert-success').fadeOut(3000);
+                }, 3000);
+                </text>
+            }
+            
+            // Si hay un error relacionado específicamente con el registro, abrir el modal
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage) && (Model.ErrorMessage.Contains("contraseñas no coinciden") || Model.ErrorMessage.Contains("campos requeridos") || Model.ErrorMessage.Contains("Error al registrar")))
+            {
+                <text>
+                $('#registerModal').modal('show');
+                </text>
+            }
+        });
+    </script>
+}

@@ -1,0 +1,27 @@
+@page "{id:int}"
+@model WebApp.Pages.Articles.DeleteModel
+@{
+    ViewData["Title"] = "Eliminar artículo";
+}
+<div class="container mt-5">
+    <h4 class="mb-4 text-danger">Eliminar artículo</h4>
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+    <div class="alert alert-warning">
+        ¿Está seguro que desea eliminar el siguiente artículo?
+    </div>
+    <dl class="row">
+        <dt class="col-sm-2">Título</dt>
+        <dd class="col-sm-10">@Model.Article?.Title</dd>
+        <dt class="col-sm-2">Autor</dt>
+        <dd class="col-sm-10">@Model.Article?.Author</dd>
+        <dt class="col-sm-2">Publicado</dt>
+        <dd class="col-sm-10">@Model.Article?.Date.ToString("yyyy-MM-dd")</dd>
+    </dl>
+    <form method="post">
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-outline-secondary ms-2" asp-page="Manage">Cancelar</a>
+    </form>
+</div>
